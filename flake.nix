@@ -4,24 +4,24 @@
   outputs =
     { self, nixpkgs }:
     let
-      systems = [
-        "x86_64-darwin"
-        "x86_64-linux"
-        "aarch64-darwin"
-        "aarch64-linux"
-      ];
-      eachSystem = fn: nixpkgs.lib.genAttrs systems (system: fn nixpkgs.legacyPackages.${system});
+      eachSystem = fn: nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed fn;
     in
     {
-      devShells = eachSystem (pkgs: {
-        default = pkgs.mkShell {
-          packages = with pkgs; [
-            rustc
-            rustfmt
-            rust-analyzer
-            cargo
-          ];
-        };
-      });
+      devShells = eachSystem (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              rustc
+              rustfmt
+              rust-analyzer
+              cargo
+            ];
+          };
+        }
+      );
     };
 }
