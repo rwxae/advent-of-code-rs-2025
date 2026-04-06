@@ -1,24 +1,7 @@
-use advent_of_code_2025::read_input;
-
 const START_STATE: i32 = 50;
 const START_COUNT: u32 = 0;
 
-fn main() {
-    let input_easy = read_input("01-easy.txt");
-    let input_hard = read_input("01-hard.txt");
-
-    let answer_1_easy = solution_1(&input_easy);
-    let answer_1_hard = solution_1(&input_hard);
-    let answer_2_easy = solution_2(&input_easy);
-    let answer_2_hard = solution_2(&input_hard);
-
-    println!("Answer 1 (easy): {answer_1_easy}");
-    println!("Answer 1 (hard): {answer_1_hard}");
-    println!("Answer 2 (easy): {answer_2_easy}");
-    println!("Answer 2 (hard): {answer_2_hard}");
-}
-
-fn solution_1(input: &str) -> u32 {
+pub fn solution_1(input: &str) -> u32 {
     input
         .trim()
         .lines()
@@ -40,7 +23,7 @@ fn solution_1(input: &str) -> u32 {
         .0
 }
 
-fn solution_2(input: &str) -> u32 {
+pub fn solution_2(input: &str) -> u32 {
     input
         .trim()
         .lines()
@@ -69,24 +52,25 @@ fn solution_2(input: &str) -> u32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::solve;
 
     #[test]
     fn test_1_easy() {
-        assert_eq!(solution_1(&read_input("01-easy.txt")), 3);
+        assert_eq!(solve(1, 1, solution_1), 3);
     }
 
     #[test]
     fn test_1_hard() {
-        assert_eq!(solution_1(&read_input("01-hard.txt")), 1180);
+        assert_eq!(solve(1, 2, solution_1), 1180);
     }
 
     #[test]
     fn test_2_easy() {
-        assert_eq!(solution_2(&read_input("01-easy.txt")), 6);
+        assert_eq!(solve(1, 1, solution_2), 6);
     }
 
     #[test]
     fn test_2_hard() {
-        assert_eq!(solution_2(&read_input("01-hard.txt")), 6892);
+        assert_eq!(solve(1, 2, solution_2), 6892);
     }
 }

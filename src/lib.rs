@@ -1,13 +1,19 @@
+pub mod day_01;
+pub mod day_02;
+
 use std::fs::read_to_string;
 use std::path::PathBuf;
 
-pub fn read_input(filename: &str) -> String {
-    match read_to_string(
-        PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("inputs")
-            .join(filename),
-    ) {
-        Ok(content) => content,
-        Err(_) => panic!("Input does not exist!"),
-    }
+pub fn solve<T, F>(day: u8, problem: u8, f: F) -> T
+where
+    F: FnOnce(&str) -> T,
+{
+    let input_path = PathBuf::from(format!(
+        "{}/inputs/{:02}-{:02}.txt",
+        env!("CARGO_MANIFEST_DIR"),
+        day,
+        problem
+    ));
+    let content = read_to_string(&input_path).expect("File with input data should exist");
+    f(&content)
 }
