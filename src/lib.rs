@@ -1,5 +1,6 @@
 pub mod day_01;
 pub mod day_02;
+pub mod day_03;
 
 use std::fs::read_to_string;
 use std::path::PathBuf;
