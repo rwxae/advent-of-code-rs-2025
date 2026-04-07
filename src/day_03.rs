@@ -21,8 +21,30 @@ pub fn solution_1(input: &str) -> u32 {
         .sum()
 }
 
-pub fn solution_2(_input: &str) -> i32 {
-    todo!()
+pub fn solution_2(input: &str) -> u64 {
+    input
+        .split_whitespace()
+        .map(|line| {
+            let line_len = line.len();
+            let mut start = 0;
+            let mut end = 12;
+            let mut result: Vec<char> = Vec::with_capacity(12);
+            while end != 0 {
+                let (i, digit) = line[start..=(line_len - end)]
+                    .char_indices()
+                    .max_by(|&(_, ch), &(_, ch2)| match ch.cmp(&ch2) {
+                        std::cmp::Ordering::Equal => std::cmp::Ordering::Greater,
+                        other => other,
+                    })
+                    .unwrap();
+                result.push(digit);
+                start = start + i + 1;
+                end -= 1;
+            }
+            result.iter().collect::<String>()
+        })
+        .map(|v| v.parse::<u64>().unwrap())
+        .sum()
 }
 
 #[cfg(test)]
@@ -42,11 +64,11 @@ mod tests {
 
     #[test]
     fn test_2_easy() {
-        assert_eq!(solve(3, 1, solution_2), 0);
+        assert_eq!(solve(3, 1, solution_2), 3121910778619);
     }
 
     #[test]
     fn test_2_hard() {
-        assert_eq!(solve(3, 2, solution_2), 0);
+        assert_eq!(solve(3, 2, solution_2), 170520923035051);
     }
 }
