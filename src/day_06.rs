@@ -42,8 +42,41 @@ pub fn solution_1(input: &str) -> u64 {
     values.iter().sum()
 }
 
-pub fn solution_2(_input: &str) -> i64 {
-    todo!()
+pub fn solution_2(input: &str) -> u64 {
+    let worksheet: Vec<Vec<char>> = input.split('\n').map(|row| row.chars().collect()).collect();
+    let mut sum = 0;
+    let mut numbers: Vec<u64> = Vec::new();
+    for j in (0..worksheet[0].len()).rev() {
+        let mut number: Option<u64> = None;
+        for i in 0..worksheet.len() {
+            let Some(token) = worksheet.get(i).and_then(|col| col.get(j)) else {
+                continue;
+            };
+            match token {
+                '0'..='9' => {
+                    let digit = token.to_digit(10).unwrap() as u64;
+                    let next = number.map_or(digit, |v| v * 10 + digit);
+                    number.replace(next);
+                }
+                '+' | '*' => {
+                    if let Some(number) = number.take() {
+                        numbers.push(number);
+                    }
+                    let iter = numbers.drain(..);
+                    sum += match token {
+                        '+' => iter.sum::<u64>(),
+                        '*' => iter.product::<u64>(),
+                        _ => unreachable!(),
+                    };
+                }
+                _ => (),
+            }
+        }
+        if let Some(number) = number {
+            numbers.push(number);
+        }
+    }
+    sum
 }
 
 #[cfg(test)]
@@ -63,11 +96,11 @@ mod tests {
 
     #[test]
     fn test_2_easy() {
-        assert_eq!(solve(6, 1, solution_2), 4174379265);
+        assert_eq!(solve(6, 1, solution_2), 3263827);
     }
 
     #[test]
     fn test_2_hard() {
-        assert_eq!(solve(6, 2, solution_2), 50857215650);
+        assert_eq!(solve(6, 2, solution_2), 9627174150897);
     }
 }
