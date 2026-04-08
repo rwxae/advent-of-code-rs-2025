@@ -14,7 +14,7 @@ pub fn solution_1(input: &str) -> usize {
     ingridients
         .split_whitespace()
         .map(|id| id.parse::<u64>().unwrap())
-        .filter(|id| ranges.iter().any(|(from, to)| *id >= *from && *id <= *to))
+        .filter(|id| ranges.iter().any(|(from, to)| id >= from && id <= to))
         .count()
 }
 
