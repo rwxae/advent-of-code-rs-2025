@@ -7,14 +7,14 @@ pub fn solution_1(input: &str) -> usize {
         .map(|range| {
             range
                 .split_once('-')
-                .map(|(from, to)| from.parse::<u64>().unwrap()..=to.parse::<u64>().unwrap())
+                .map(|(from, to)| (from.parse::<u64>().unwrap(), to.parse::<u64>().unwrap()))
                 .expect("Each line should contain a valid range")
         })
         .collect::<Vec<_>>();
     ingridients
         .split_whitespace()
         .map(|id| id.parse::<u64>().unwrap())
-        .filter(|id| ranges.iter().any(|range| range.contains(id)))
+        .filter(|id| ranges.iter().any(|(from, to)| *id >= *from && *id <= *to))
         .count()
 }
 
