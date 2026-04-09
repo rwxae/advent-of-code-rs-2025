@@ -84,12 +84,7 @@ pub fn solution_1(input: &str) -> u64 {
     let mut pairs = points
         .iter()
         .enumerate()
-        .map(|(i, point)| {
-            points[i + 1..]
-                .iter()
-                .map(|point2| (point, point2))
-                .collect::<Vec<_>>()
-        })
+        .map(|(i, point)| points[i + 1..].iter().map(move |point2| (point, point2)))
         .flatten()
         .collect::<Vec<_>>();
 
@@ -132,12 +127,7 @@ pub fn solution_2(input: &str) -> i64 {
     let mut pairs = points
         .iter()
         .enumerate()
-        .map(|(i, point)| {
-            points[i + 1..]
-                .iter()
-                .map(|point2| (point, point2))
-                .collect::<Vec<_>>()
-        })
+        .map(|(i, point)| points[i + 1..].iter().map(move |point2| (point, point2)))
         .flatten()
         .collect::<Vec<_>>();
 
