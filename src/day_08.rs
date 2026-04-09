@@ -114,8 +114,58 @@ pub fn solution_1(input: &str) -> u64 {
     stats.iter().rev().take(3).product()
 }
 
-pub fn solution_2(_input: &str) -> u64 {
-    todo!()
+pub fn solution_2(input: &str) -> i64 {
+    let points = input
+        .trim()
+        .split_whitespace()
+        .map(|line| {
+            let mut line = line
+                .split(',')
+                .map(|v| v.parse::<i64>().expect("Coordinate must be an integer"));
+            let x = line.next().expect("X coordinate");
+            let y = line.next().expect("Y coordinate");
+            let z = line.next().expect("Z coordinate");
+            Point { x, y, z }
+        })
+        .collect::<Vec<_>>();
+
+    let mut pairs = points
+        .iter()
+        .enumerate()
+        .map(|(i, point)| {
+            points[i + 1..]
+                .iter()
+                .map(|point2| (point, point2))
+                .collect::<Vec<_>>()
+        })
+        .flatten()
+        .collect::<Vec<_>>();
+
+    pairs.sort_by(|a, b| a.0.distance(a.1).total_cmp(&b.0.distance(b.1)));
+
+    let mut graph: HashMap<&Point, Vec<&Point>> = HashMap::new();
+    let mut last_connection: Option<(&Point, &Point)> = None;
+    let mut left_connections = points.len() - 1;
+
+    for (a, b) in pairs {
+        if left_connections == 0 {
+            break;
+        }
+        if let (Some(_), Some(_)) = (graph.get(a), graph.get(b)) {
+            if is_connected(&graph, a, b) {
+                continue;
+            }
+            graph.entry(a).and_modify(|v| v.push(b));
+            graph.entry(b).and_modify(|v| v.push(a));
+        } else {
+            graph.entry(a).and_modify(|v| v.push(b)).or_insert(vec![b]);
+            graph.entry(b).and_modify(|v| v.push(a)).or_insert(vec![a]);
+        }
+        left_connections -= 1;
+        last_connection.replace((a, b));
+    }
+
+    last_connection.map(|(a, b)| a.x * b.x).unwrap()
 }
 
 #[cfg(test)]
@@ -135,11 +185,11 @@ mod tests {
 
     #[test]
     fn test_2_easy() {
-        assert_eq!(solve(8, 1, solution_2), todo!());
+        assert_eq!(solve(8, 1, solution_2), 25272);
     }
 
     #[test]
     fn test_2_hard() {
-        assert_eq!(solve(8, 2, solution_2), todo!());
+        assert_eq!(solve(8, 2, solution_2), 7499461416);
     }
 }
