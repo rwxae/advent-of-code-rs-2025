@@ -1,7 +1,7 @@
 pub fn sum_invalid(input: &str, mut is_valid: impl FnMut(i64) -> bool) -> i64 {
     input
         .split(",")
-        .map(|range| {
+        .flat_map(|range| {
             range
                 .split_once('-')
                 .map(|(from, to)| {
@@ -17,7 +17,6 @@ pub fn sum_invalid(input: &str, mut is_valid: impl FnMut(i64) -> bool) -> i64 {
                 .map(|(from, to)| from..=to)
                 .expect("Expected a range")
         })
-        .flatten()
         .filter(|v| !is_valid(*v))
         .sum()
 }

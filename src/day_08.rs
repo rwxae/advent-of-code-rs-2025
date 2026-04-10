@@ -64,7 +64,6 @@ fn is_connected(graph: &Graph, a: &Point, b: &Point) -> bool {
 
 pub fn solution_1(input: &str) -> u64 {
     let points = input
-        .trim()
         .split_whitespace()
         .map(|line| {
             let mut line = line
@@ -84,8 +83,7 @@ pub fn solution_1(input: &str) -> u64 {
     let mut pairs = points
         .iter()
         .enumerate()
-        .map(|(i, point)| points[i + 1..].iter().map(move |point2| (point, point2)))
-        .flatten()
+        .flat_map(|(i, point)| points[i + 1..].iter().map(move |point2| (point, point2)))
         .collect::<Vec<_>>();
 
     pairs.sort_by(|a, b| a.0.distance(a.1).total_cmp(&b.0.distance(b.1)));
@@ -111,7 +109,6 @@ pub fn solution_1(input: &str) -> u64 {
 
 pub fn solution_2(input: &str) -> i64 {
     let points = input
-        .trim()
         .split_whitespace()
         .map(|line| {
             let mut line = line
@@ -127,8 +124,7 @@ pub fn solution_2(input: &str) -> i64 {
     let mut pairs = points
         .iter()
         .enumerate()
-        .map(|(i, point)| points[i + 1..].iter().map(move |point2| (point, point2)))
-        .flatten()
+        .flat_map(|(i, point)| points[i + 1..].iter().map(move |point2| (point, point2)))
         .collect::<Vec<_>>();
 
     pairs.sort_by(|a, b| a.0.distance(a.1).total_cmp(&b.0.distance(b.1)));

@@ -4,18 +4,16 @@ type Position = (usize, usize);
 
 fn follow_beam(diagram: &[&[u8]], seen: &mut HashSet<Position>, position: Position) {
     for i in position.0..diagram.len() {
-        match diagram[i][position.1] as char {
-            '^' => {
-                if seen.contains(&(i, position.1)) {
-                    return;
-                }
-                seen.insert((i, position.1));
-                follow_beam(diagram, seen, (i, position.1 - 1));
-                follow_beam(diagram, seen, (i, position.1 + 1));
-                return;
-            }
-            _ => (),
+        if diagram[i][position.1] as char != '^' {
+            continue;
         }
+        if seen.contains(&(i, position.1)) {
+            return;
+        }
+        seen.insert((i, position.1));
+        follow_beam(diagram, seen, (i, position.1 - 1));
+        follow_beam(diagram, seen, (i, position.1 + 1));
+        return;
     }
 }
 
@@ -37,19 +35,17 @@ pub fn solution_1(input: &str) -> usize {
 
 fn follow_beam_2(diagram: &[&[u8]], seen: &mut HashMap<Position, u64>, position: Position) -> u64 {
     for i in position.0..diagram.len() {
-        match diagram[i][position.1] as char {
-            '^' => {
-                if let Some(v) = seen.get(&(i, position.1)) {
-                    return *v;
-                }
-                let left = follow_beam_2(diagram, seen, (i, position.1 - 1));
-                let right = follow_beam_2(diagram, seen, (i, position.1 + 1));
-                let value = left + right;
-                seen.insert((i, position.1), left + right);
-                return value;
-            }
-            _ => (),
+        if diagram[i][position.1] as char != '^' {
+            continue;
         }
+        if let Some(v) = seen.get(&(i, position.1)) {
+            return *v;
+        }
+        let left = follow_beam_2(diagram, seen, (i, position.1 - 1));
+        let right = follow_beam_2(diagram, seen, (i, position.1 + 1));
+        let value = left + right;
+        seen.insert((i, position.1), left + right);
+        return value;
     }
     1
 }

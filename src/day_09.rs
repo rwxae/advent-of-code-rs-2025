@@ -11,7 +11,6 @@ impl Point {
 
 pub fn solution_1(input: &str) -> i64 {
     let points = input
-        .trim()
         .split_whitespace()
         .map(|line| {
             let (x, y) = line.split_once(',').unwrap();
@@ -24,14 +23,13 @@ pub fn solution_1(input: &str) -> i64 {
     let pairs = points
         .iter()
         .enumerate()
-        .map(|(i, a)| points[i + 1..].iter().map(move |b| (a, b)))
-        .flatten()
+        .flat_map(|(i, a)| points[i + 1..].iter().map(move |b| (a, b)))
         .collect::<Vec<_>>();
 
     pairs.iter().map(|(a, b)| a.area(b)).max().unwrap()
 }
 
-pub fn solution_2(input: &str) -> u64 {
+pub fn solution_2(_input: &str) -> u64 {
     todo!()
 }
 

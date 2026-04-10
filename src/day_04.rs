@@ -40,14 +40,7 @@ pub fn solution_1(input: &str) -> u32 {
 pub fn solution_2(input: &str) -> u64 {
     let mut grid: Vec<Vec<bool>> = input
         .split_whitespace()
-        .map(|line| {
-            line.chars()
-                .map(|ch| match ch {
-                    '@' => true,
-                    _ => false,
-                })
-                .collect()
-        })
+        .map(|line| line.chars().map(|ch| matches!(ch, '@')).collect())
         .collect();
     let mut result = 0;
     let mut i = 0;
